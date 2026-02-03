@@ -26,7 +26,7 @@
 
     - name: Copy project files to nginx html directory
       copy:
-        src: ../
+        src:  "{{ playbook_dir }}/../web/"
         dest: /var/www/html/
         owner: www-data
         group: www-data

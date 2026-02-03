@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        IMAGE_NAME = "sahilmor16/todo-app"
+        IMAGE = "sahilmor16/todo-app"
         
     }
 
@@ -17,17 +17,17 @@ pipeline {
 
         stage('Build Docker Image') {
             steps {
-                sh 'docker build -t $IMAGE_NAME:latest .'
-                sh 'docker tag $IMAGE_NAME:$IMAGE_TAG $IMAGE_NAME:latest'
-
+                sh 'docker build -t $IMAGE:$BUILD_NUMBER .'
+                sh 'docker tag $IMAGE:$BUILD_NUMBER $IMAGE:latest'
             }
         }
+
 
         stage('Push to Docker Hub') {
             steps {
             withDockerRegistry(url: 'https://index.docker.io/v1/', credentialsId: 'dockerhub-creds') {
-                sh 'docker push $IMAGE_NAME:$BUILD_NUMBER'
-                sh 'docker push $IMAGE_NAME:latest'
+                sh 'docker push $IMAGE:$BUILD_NUMBER'
+                sh 'docker push $IMAGE:latest'
                 }
             }
         }

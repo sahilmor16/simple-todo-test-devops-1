@@ -1,0 +1,41 @@
+- hosts: web
+  become: true
+
+  tasks:
+
+    - name: Update apt cache
+      apt:
+        update_cache: yes
+
+    - name: Check if nginx is installed
+      command: nginx -v
+      register: nginx_check
+      ignore_errors: yes
+
+    - name: Install nginx if not present
+      apt:
+        name: nginx
+        state: present
+      when: nginx_check.failed
+
+    - name: Ensure nginx is running
+      service:
+        name: nginx
+        state: started
+        enabled: yes
+
+    - name: Copy project files to nginx html directory
+      copy:
+        src: ../
+        dest: /var/www/html/
+        owner: www-data
+        group: www-data
+        mode: '0644'
+        remote_src: no
+      notify: Restart nginx
+
+  handlers:
+    - name: Restart nginx
+      service:
+        name: nginx
+        state: restarted

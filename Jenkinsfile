@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         IMAGE_NAME = "sahilmor16/todo-app"
-        DOCKER_CREDS = "dockerhub-creds"
+        
     }
 
     stages {
@@ -11,7 +11,7 @@ pipeline {
         stage('Clone Repository') {
             steps {
                 git branch: 'main',
-                    url: 'https://github.com/USERNAME/todo-app.git'
+                    url: 'https://github.com/sahilmor16/simple-todo-test-devops-1.git'
             }
         }
 

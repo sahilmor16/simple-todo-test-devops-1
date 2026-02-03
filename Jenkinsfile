@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         IMAGE = "sahilmor16/todo-app"
-        
+        EC2_PRIVATE_IP = credentials('EC2_PRIVATE_IP')
     }
 
     stages {

@@ -1,0 +1,2 @@
+ansible_host: "{{ lookup('env', 'EC2_PRIVATE_IP') }}"
+ansible_user: ubuntu

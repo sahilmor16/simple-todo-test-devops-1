@@ -1,0 +1,49 @@
+pipeline {
+    agent any
+
+    environment {
+        IMAGE_NAME = "sahilmor16/todo-app"
+        DOCKER_CREDS = "dockerhub-creds"
+    }
+
+    stages {
+
+        stage('Clone Repository') {
+            steps {
+                git branch: 'main',
+                    url: 'https://github.com/USERNAME/todo-app.git'
+            }
+        }
+
+        stage('Build Docker Image') {
+            steps {
+                sh 'docker build -t $IMAGE_NAME:latest .'
+            }
+        }
+
+        stage('Push to Docker Hub') {
+            steps {
+            withDockerRegistry(url: 'https://index.docker.io/v1/', credentialsId: 'dockerhub-creds') {
+                sh 'docker push $IMAGE_NAME:$BUILD_NUMBER'
+                sh 'docker push $IMAGE_NAME:latest'
+                }
+            }
+        }
+
+
+        stage('Deploy using Ansible') {
+            steps {
+                sh 'ansible-playbook -i ansible/inventory.ini ansible/deploy.yml'
+            }
+        }
+    }
+
+    post {
+        success {
+            echo "✅ CI/CD Pipeline Executed Successfully"
+        }
+        failure {
+            echo "❌ Pipeline Failed"
+        }
+    }
+}

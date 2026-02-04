@@ -2,7 +2,9 @@
   become: true
 
   tasks:
-
+    - debug:
+        msg: "EC2 IP='{{ ansible_host }}'"
+        
     - name: Update apt cache
       apt:
         update_cache: yes

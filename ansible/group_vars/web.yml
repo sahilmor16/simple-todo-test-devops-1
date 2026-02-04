@@ -1,2 +1,4 @@
 ansible_host: "{{ lookup('env', 'EC2_PRIVATE_IP') | trim }}"
 ansible_user: jenkins
+ansible_become: yes
+ansible_become_method: sudo
